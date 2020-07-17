@@ -1,0 +1,17 @@
+name = "plugin1"
+description = "test plugin 1"
+version = "1.0.0" 
+
+default-target = "samd21g18au"
+#default-target = "cortex-m3"
+
+[dependencies]
+	samd21 = "latest"
+	
+[plugins]
+	gcc-arm-none-eabi = "latest"
+	jlink = "latest"
+	ozone = "latest"
+
+[target.samd21g18au]
+	arch = "ATSAMD21G18AU"

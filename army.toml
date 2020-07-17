@@ -1,0 +1,122 @@
+name = "samd21"
+description = "samd21 processor definitions"
+version = "1.3.395" 
+
+[dependencies]
+	"cmsis" = "latest"
+
+[cmake]
+	include = "cmake/samd21.cmake"
+
+[packaging]
+	include = [
+		"cmake",
+		"dfp",
+		"LICENSE",
+		"README.md",
+	]
+
+[arch]
+
+[arch.ATSAMD21E15BU]
+definition = "cmake/ATSAMD21E15BU.cmake"
+
+[arch.ATSAMD21G17A]
+definition = "cmake/ATSAMD21G17A.cmake"
+
+[arch.ATSAMD21G15A]
+definition = "cmake/ATSAMD21G15A.cmake"
+
+[arch.ATSAMD21G15B]
+definition = "cmake/ATSAMD21G15B.cmake"
+
+[arch.ATSAMD21E16L]
+definition = "cmake/ATSAMD21E16L.cmake"
+
+[arch.ATSAMD21G15L]
+definition = "cmake/ATSAMD21G15L.cmake"
+
+[arch.ATSAMD21E16B]
+definition = "cmake/ATSAMD21E16B.cmake"
+
+[arch.ATSAMD21E16A]
+definition = "cmake/ATSAMD21E16A.cmake"
+
+[arch.ATSAMD21G17L]
+definition = "cmake/ATSAMD21G17L.cmake"
+
+[arch.ATSAMD21E16BU]
+definition = "cmake/ATSAMD21E16BU.cmake"
+
+[arch.ATSAMD21E17DU]
+definition = "cmake/ATSAMD21E17DU.cmake"
+
+[arch.ATSAMD21E17L]
+definition = "cmake/ATSAMD21E17L.cmake"
+
+[arch.ATSAMD21G17D]
+definition = "cmake/ATSAMD21G17D.cmake"
+
+[arch.ATSAMD21J15A]
+definition = "cmake/ATSAMD21J15A.cmake"
+
+[arch.ATSAMD21G18A]
+definition = "cmake/ATSAMD21G18A.cmake"
+
+[arch.ATSAMD21G17AU]
+definition = "cmake/ATSAMD21G17AU.cmake"
+
+[arch.ATSAMD21J17D]
+definition = "cmake/ATSAMD21J17D.cmake"
+
+[arch.ATSAMD21J17A]
+definition = "cmake/ATSAMD21J17A.cmake"
+
+[arch.ATSAMD21E15CU]
+definition = "cmake/ATSAMD21E15CU.cmake"
+
+[arch.ATSAMD21E15B]
+definition = "cmake/ATSAMD21E15B.cmake"
+
+[arch.ATSAMD21E15A]
+definition = "cmake/ATSAMD21E15A.cmake"
+
+[arch.ATSAMD21E17A]
+definition = "cmake/ATSAMD21E17A.cmake"
+
+[arch.ATSAMD21E15L]
+definition = "cmake/ATSAMD21E15L.cmake"
+
+[arch.ATSAMD21E17D]
+definition = "cmake/ATSAMD21E17D.cmake"
+
+[arch.ATSAMD21J15B]
+definition = "cmake/ATSAMD21J15B.cmake"
+
+[arch.ATSAMD21G16L]
+definition = "cmake/ATSAMD21G16L.cmake"
+
+[arch.ATSAMD21E16CU]
+definition = "cmake/ATSAMD21E16CU.cmake"
+
+[arch.ATSAMD21G16A]
+definition = "cmake/ATSAMD21G16A.cmake"
+
+[arch.ATSAMD21G16B]
+definition = "cmake/ATSAMD21G16B.cmake"
+
+[arch.ATSAMD21J16B]
+definition = "cmake/ATSAMD21J16B.cmake"
+
+[arch.ATSAMD21G18AU]
+definition = "cmake/ATSAMD21G18AU.cmake"
+
+[arch.ATSAMD21J16A]
+definition = "cmake/ATSAMD21J16A.cmake"
+
+[arch.ATSAMD21E18A]
+definition = "cmake/ATSAMD21E18A.cmake"
+
+[arch.ATSAMD21J18A]
+definition = "cmake/ATSAMD21J18A.cmake"
+
