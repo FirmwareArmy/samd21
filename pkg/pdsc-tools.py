@@ -3,7 +3,6 @@ from lxml import etree
 import tomlkit
 import os
 import re
-from array import array
 
 def main():
 
