@@ -22,4 +22,9 @@ pip install lxml tomlkit
 
 # create arch configurations
 python pkg/pdsc-tools.py dfp/Atmel.SAMD21_DFP.pdsc
+
+# create c++ processors definitions
+find . -name "*.atdf" -exec python pkg/atdf-tools.py {} \;
+
+# cleanup
 rm -rf env

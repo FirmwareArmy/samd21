@@ -130,6 +130,46 @@ def main():
                 f.write(f'set(LINKER_FLAGS "'+'${LINKER_FLAGS}'+' -T $ENV{LIBRARY_PATH}/'+f'dfp/{link}")\n')
             f.write("\n")
 
+    # create Core.h
+    with open(f"src/core/Core.h", "w") as f:
+        f.write("#pragma once\n")
+        f.write("\n")
+        f.write("#include <stdint.h>\n\n")
+        f.write("\n")
+#         f.write('extern "C" {\n')
+#         f.write("#include <ARMCM0plus.h>\n")
+#         f.write("#include <core_cm0plus.h>\n")
+#         f.write("}\n")
+#         f.write("\n")
+        
+        first = True
+        for file in cmake:
+            if first==True:
+                f.write("#if ")
+                first = False
+            else:
+                f.write("#elif ")
+            name = file.replace("AT", "")
+            f.write(f"defined(__{name}__) || defined(__{file}__)\n")
+            f.write(f"#    include <core/{file.lower()}++.h>\n")
+        f.write("#endif\n")
+
+    # create core.h
+    with open(f"src/core/core.h", "w") as f:
+        f.write("#pragma once\n")
+        f.write("\n")
+        first = True
+        for file in cmake:
+            if first==True:
+                f.write("#if ")
+                first = False
+            else:
+                f.write("#elif ")
+            name = file.replace("AT", "")
+            f.write(f"defined(__{name}__) || defined(__{file}__)\n")
+            f.write(f"#    include <{name.lower()}.h>\n")
+        f.write("#endif\n")
+
 def pattern_to_regex(pattern):
     regex = "^"
     for c in pattern:
