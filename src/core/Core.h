@@ -2,10 +2,6 @@
 
 #include <stdint.h>
 
-//extern "C" {
-//#include <ARMCM0plus.h>
-//#include <core_cm0plus.h>
-//}
 
 #if defined(__SAMD21E15BU__) || defined(__ATSAMD21E15BU__)
 #    include <core/atsamd21e15bu++.h>

@@ -3,79 +3,6 @@
 #include <cstdint>
 
 
-namespace core {
-
-enum class pin_t : uint8_t {
-	PA00=0,
-	PA01=1,
-	PA02=2,
-	PA03=3,
-	PA04=4,
-	PA05=5,
-	PA06=6,
-	PA07=7,
-	PA08=8,
-	PA09=9,
-	PA10=10,
-	PA11=11,
-	PA14=14,
-	PA15=15,
-	PA16=16,
-	PA17=17,
-	PA18=18,
-	PA19=19,
-	PA22=22,
-	PA23=23,
-	PA24=24,
-	PA25=25,
-	PA27=27,
-	PA28=28,
-	PA30=30,
-	PA31=31,
-	Count=26
-} ;
-
-enum class port_t : uint8_t {
-	A=0,
-	Count=1
-} ;
-
-enum class mux_position_t : uint8_t {
-	A=0x0,
-	B=0x1,
-	C=0x2,
-	D=0x3,
-	E=0x4,
-	F=0x5,
-	G=0x6,
-	H=0x7,
-	Count=8
-} ;
-
-enum class sercom_t : uint8_t {
-	SERCOM0=0,
-	SERCOM1=1,
-	SERCOM2=2,
-	SERCOM3=3,
-	Count=4
-} ;
-const int SERCOM_NUMBER=(int)sercom_t::Count ;
-
-enum class gclk_gen_t : uint8_t {
-	GCLK0=0x0,
-	GCLK1=0x1,
-	GCLK2=0x2,
-	GCLK3=0x3,
-	GCLK4=0x4,
-	GCLK5=0x5,
-	GCLK6=0x6,
-	GCLK7=0x7,
-	GCLK8=0x8,
-	Count=9
-} ;
-
-}
-
 #define _U_(x)         x ## U            /**< C code: Unsigned integer literal constant value */
 #define _L_(x)         x ## L            /**< C code: Long integer literal constant value */
 #define _UL_(x)        x ## UL           /**< C code: Unsigned Long integer literal constant value */
@@ -228,101 +155,95 @@ extern "C" {
 #include <instance/wdt.h>
 #include <instance/sysctrl.h>
 
-#define AC ((::Ac*)0x42004400) 
-#define AC_INST_NUM 1
-#define AC_INSTS { AC, }
+namespace core {
 
-#define ADC ((::Adc*)0x42004000) 
-#define ADC_INST_NUM 1
-#define ADC_INSTS { ADC, }
+enum class pin_t : uint8_t {
+	PA00=0,
+	PA01=1,
+	PA02=2,
+	PA03=3,
+	PA04=4,
+	PA05=5,
+	PA06=6,
+	PA07=7,
+	PA08=8,
+	PA09=9,
+	PA10=10,
+	PA11=11,
+	PA14=14,
+	PA15=15,
+	PA16=16,
+	PA17=17,
+	PA18=18,
+	PA19=19,
+	PA22=22,
+	PA23=23,
+	PA24=24,
+	PA25=25,
+	PA27=27,
+	PA28=28,
+	PA30=30,
+	PA31=31,
+	Count=26
+} ;
 
-#define DAC ((::Dac*)0x42004800) 
-#define DAC_INST_NUM 1
-#define DAC_INSTS { DAC, }
+enum class port_t : uint8_t {
+	A=0,
+	Count=1
+} ;
+inline ::Port* const PORT=(::Port*)0x41004400 ;
+inline ::Port* const PORT_INSTS[]={ PORT, } ;
 
-#define DMAC ((::Dmac*)0x41004800) 
-#define DMAC_INST_NUM 1
-#define DMAC_INSTS { DMAC, }
+inline ::Sysctrl* const SYSCTRL=(::Sysctrl*)0x40000800 ;
 
-#define DSU ((::Dsu*)0x41002000) 
-#define DSU_INST_NUM 1
-#define DSU_INSTS { DSU, }
+inline ::Pm* const PM=(::Pm*)0x40000400 ;
 
-#define EIC ((::Eic*)0x40001800) 
-#define EIC_INST_NUM 1
-#define EIC_INSTS { EIC, }
+enum class mux_position_t : uint8_t {
+	A=0x0,
+	B=0x1,
+	C=0x2,
+	D=0x3,
+	E=0x4,
+	F=0x5,
+	G=0x6,
+	H=0x7,
+	Count=8
+} ;
 
-#define EVSYS ((::Evsys*)0x42000400) 
-#define EVSYS_INST_NUM 1
-#define EVSYS_INSTS { EVSYS, }
+enum class sercom_t : uint8_t {
+	SERCOM0=0,
+	SERCOM1=1,
+	SERCOM2=2,
+	SERCOM3=3,
+	Count=4
+} ;
+const int SERCOM_NUMBER=(int)sercom_t::Count ;
+inline ::Sercom* const SERCOM0=(::Sercom*)0x42000800 ;
+inline ::Sercom* const SERCOM1=(::Sercom*)0x42000C00 ;
+inline ::Sercom* const SERCOM2=(::Sercom*)0x42001000 ;
+inline ::Sercom* const SERCOM3=(::Sercom*)0x42001400 ;
+inline ::Sercom* const SERCOM_INSTS[]={ SERCOM0, SERCOM1, SERCOM2, SERCOM3, } ;
 
-#define GCLK ((::Gclk*)0x40000C00) 
-#define GCLK_INST_NUM 1
-#define GCLK_INSTS { GCLK, }
+enum class gclk_gen_t : uint8_t {
+	GCLK0=0x0,
+	GCLK1=0x1,
+	GCLK2=0x2,
+	GCLK3=0x3,
+	GCLK4=0x4,
+	GCLK5=0x5,
+	GCLK6=0x6,
+	GCLK7=0x7,
+	GCLK8=0x8,
+	Count=9
+} ;
+inline ::Gclk* const GCLK=(::Gclk*)0x40000C00 ;
 
-#define SBMATRIX ((::Hmatrixb*)0x41007000) 
-#define HMATRIXB_INST_NUM 1
-#define HMATRIXB_INSTS { SBMATRIX, }
+struct sercom_pad_mux_t
+{
+    int pad    :16  ;
+    mux_position_t mux  ;
+} ;
+sercom_pad_mux_t sercom_pin_to_pad(sercom_t sercom, pin_t pin) ;
 
-#define I2S ((::I2s*)0x42005000) 
-#define I2S_INST_NUM 1
-#define I2S_INSTS { I2S, }
-
-#define MTB ((::Mtb*)0x41006000) 
-#define MTB_INST_NUM 1
-#define MTB_INSTS { MTB, }
-
-#define NVMCTRL ((::Nvmctrl*)0x41004000) 
-#define NVMCTRL_INST_NUM 1
-#define NVMCTRL_INSTS { NVMCTRL, }
-
-#define PAC0 ((::Pac*)0x40000000) 
-#define PAC1 ((::Pac*)0x41000000) 
-#define PAC2 ((::Pac*)0x42000000) 
-#define PAC_INST_NUM 3
-#define PAC_INSTS { PAC0, PAC1, PAC2, }
-
-#define PM ((::Pm*)0x40000400) 
-#define PM_INST_NUM 1
-#define PM_INSTS { PM, }
-
-#define PORT ((::Port*)0x41004400) 
-#define PORT_INST_NUM 1
-#define PORT_INSTS { PORT, }
-
-#define RTC ((::Rtc*)0x40001400) 
-#define RTC_INST_NUM 1
-#define RTC_INSTS { RTC, }
-
-#define SERCOM0 ((::Sercom*)0x42000800) 
-#define SERCOM1 ((::Sercom*)0x42000C00) 
-#define SERCOM2 ((::Sercom*)0x42001000) 
-#define SERCOM3 ((::Sercom*)0x42001400) 
-#define SERCOM_INST_NUM 4
-#define SERCOM_INSTS { SERCOM0, SERCOM1, SERCOM2, SERCOM3, }
-
-#define SYSCTRL ((::Sysctrl*)0x40000800) 
-#define SYSCTRL_INST_NUM 1
-#define SYSCTRL_INSTS { SYSCTRL, }
-
-#define TC3 ((::Tc*)0x42002C00) 
-#define TC4 ((::Tc*)0x42003000) 
-#define TC5 ((::Tc*)0x42003400) 
-#define TC_INST_NUM 3
-#define TC_INSTS { TC3, TC4, TC5, }
-
-#define TCC0 ((::Tcc*)0x42002000) 
-#define TCC1 ((::Tcc*)0x42002400) 
-#define TCC2 ((::Tcc*)0x42002800) 
-#define TCC_INST_NUM 3
-#define TCC_INSTS { TCC0, TCC1, TCC2, }
-
-#define USB ((::Usb*)0x41005000) 
-#define USB_INST_NUM 1
-#define USB_INSTS { USB, }
-
-#define WDT ((::Wdt*)0x40001000) 
-#define WDT_INST_NUM 1
-#define WDT_INSTS { WDT, }
-
+}
 

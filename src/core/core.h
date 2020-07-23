@@ -1,9 +1,5 @@
 #pragma once
 
-//#ifdef __cplusplus
-//namespace {
-//#endif
-
 #if defined(__SAMD21E15BU__) || defined(__ATSAMD21E15BU__)
 #    include <samd21e15bu.h>
 #elif defined(__SAMD21G17A__) || defined(__ATSAMD21G17A__)
@@ -73,7 +69,3 @@
 #elif defined(__SAMD21J18A__) || defined(__ATSAMD21J18A__)
 #    include <samd21j18a.h>
 #endif
-
-//#ifdef __cplusplus
-//}
-//#endif

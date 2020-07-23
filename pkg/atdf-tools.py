@@ -25,29 +25,7 @@ def main():
         "#include <cstdint>",
         "",
         "",
-        "namespace core {",
-        ""
         ]
-    
-    # in core namespace
-    
-    lines += get_pins(tree)
-    lines += [""]
-    
-    lines += get_ports(tree)
-    lines += [""]
-    
-    lines += get_mux_positions(tree)
-    lines += [""]
-
-    lines += get_sercoms(tree)
-    lines += [""]
-
-    lines += get_gclks(tree)
-    lines += [""]
-
-    lines += ["}"]
-    lines += [""]
     
     # in global namespace 
     lines += ["#define _U_(x)         x ## U            /**< C code: Unsigned integer literal constant value */"]
@@ -73,13 +51,67 @@ def main():
     lines += get_instance_includes(tree)
     lines += [""]
 
-    lines += get_peripherals(tree)
+    # in core namespace
+    lines += [
+        "namespace core {",
+        ""
+        ]
+    
+    lines += get_pins(tree)
     lines += [""]
+    
+    lines += get_ports(tree)
+    lines += [""]
+    
+    lines += get_sysctrl(tree)
+    lines += [""]
+
+    lines += get_pm(tree)
+    lines += [""]
+
+    lines += get_mux_positions(tree)
+    lines += [""]
+
+    lines += get_sercoms(tree)
+    lines += [""]
+
+    lines += get_gclks(tree)
+    lines += [""]
+
+    lines += get_sercom_mux_h(tree)
+    lines += [""]
+
+    lines += ["}"]
+    lines += [""]
+    
+#     lines += get_peripherals(tree)
+#     lines += [""]
 
     with open(f"src/core/{device}++.h", "w") as f:
         for line in lines:
             f.write(line+"\n")
         
+
+
+    lines = [
+        f"#include <core/{device}++.h>",
+        "",
+        "",
+        "namespace core {",
+        ""
+        ]
+    
+    lines += get_sercom_mux_cpp(tree)
+    lines += [""]
+
+    lines += ["}"]
+    lines += [""]
+    
+
+    with open(f"src/core/{device}++.cpp", "w") as f:
+        for line in lines:
+            f.write(line+"\n")
+
 def get_pins(tree):
     res = [
         "enum class pin_t : uint8_t {"
@@ -107,6 +139,45 @@ def get_ports(tree):
         res += [f"\t{chr(ord('A')+port)}={port},"]
     res += [f"\tCount={num}"]
     res += ["} ;"]
+    
+    # add registers
+    module = tree.xpath("//devices/device/peripherals/module[@name='PORT']")[0]
+    register = module.xpath("instance/register-group[@name='PORT']")[0]
+    classname = module.get('name')[0]+module.get('name').lower()[1:]
+    address = register.get('offset')
+    res += [f"inline ::{classname}* const {register.get('name')}=(::{classname}*){address} ;"]
+
+    registers = module.xpath("instance/register-group[@name='PORT']")
+    insts = f"inline ::{classname}* const {module.get('name')}_INSTS[]="+"{"
+    for register in registers:
+        insts += f" {register.get('name')},"
+    insts += " } ;"
+    res += [insts]
+    
+    return res
+
+def get_sysctrl(tree):
+    res = []
+    
+    # add registers
+    module = tree.xpath("//devices/device/peripherals/module[@name='SYSCTRL']")[0]
+    register = module.xpath("instance/register-group[@name='SYSCTRL']")[0]
+    classname = module.get('name')[0]+module.get('name').lower()[1:]
+    address = register.get('offset')
+    res += [f"inline ::{classname}* const {register.get('name')}=(::{classname}*){address} ;"]
+
+    return res
+
+def get_pm(tree):
+    res = []
+    
+    # add registers
+    module = tree.xpath("//devices/device/peripherals/module[@name='PM']")[0]
+    register = module.xpath("instance/register-group[@name='PM']")[0]
+    classname = module.get('name')[0]+module.get('name').lower()[1:]
+    address = register.get('offset')
+    res += [f"inline ::{classname}* const {register.get('name')}=(::{classname}*){address} ;"]
+
     return res
 
 def get_mux_positions(tree):
@@ -134,6 +205,21 @@ def get_sercoms(tree):
     res += [f"\tCount={len(sercoms)}"]
     res += ["} ;"]
     res += [f"const int SERCOM_NUMBER=(int)sercom_t::Count ;"]
+
+    # add registers
+    module = tree.xpath("//devices/device/peripherals/module[@name='SERCOM']")[0]
+    registers = module.xpath("instance/register-group[@name-in-module='SERCOM']")
+    classname = module.get('name')[0]+module.get('name').lower()[1:]
+    for register in registers:
+        address = register.get('offset')
+        res += [f"inline ::{classname}* const {register.get('name')}=(::{classname}*){address} ;"]
+
+    insts = f"inline ::{classname}* const {module.get('name')}_INSTS[]="+"{"
+    for register in registers:
+        insts += f" {register.get('name')},"
+    insts += " } ;"
+    res += [insts]
+
     return res
 
 def get_gclks(tree):
@@ -146,6 +232,14 @@ def get_gclks(tree):
         res += [f"\t{gclk.get('name')}={gclk.get('value')},"]
     res += [f"\tCount={len(gclks)}"]
     res += ["} ;"]
+
+    # add registers
+    module = tree.xpath("//devices/device/peripherals/module[@name='GCLK']")[0]
+    register = module.xpath("instance/register-group[@name='GCLK']")[0]
+    classname = module.get('name')[0]+module.get('name').lower()[1:]
+    address = register.get('offset')
+    res += [f"inline ::{classname}* const {register.get('name')}=(::{classname}*){address} ;"]
+    
     return res
 
 def get_irqs(tree):
@@ -233,20 +327,57 @@ def get_peripherals(tree):
     for module in modules:
         classname = module.get('name')[0]+module.get('name').lower()[1:]
         
-        if module.get("name") not in ["FUSES", "PTC", "NVIC", "SysTick", "SystemControl"]:
-            instances = module.xpath("instance")
-            for instance in instances:
-                address = instance.xpath("register-group")[0].get('offset')
-                if instance.get("name")=="SBMATRIX":
-                    classname = "Hmatrixb"
-                res += [f"#define {instance.get('name')} ((::{classname}*){address}) "]
-            res += [f"#define {module.get('name')}_INST_NUM {len(instances)}"]
-            insts = f"#define {module.get('name')}_INSTS "+"{"
-            for instance in instances:
-                insts += f" {instance.get('name')},"
-            insts += " }"
-            res += [insts]
+        if module.get("name") not in ["FUSES", "NVIC", "SysTick", "SystemControl"]:
+            if module.get("name")=="SBMATRIX":
+                classname = "Hmatrixb"
+
+            register_groups = module.xpath("instance/register-group")
+            if module.get("name")=="PORT":
+                for rg in register_groups:
+                    address = rg.get('offset')
+                    res += [f"#define {rg.get('name')} ((::{classname}*){address}) "]
+                if len(module.xpath("instance"))!=1:
+                    print("TODO: PORT instances !=1 not handled")
+                    exit(1)
+                res += ["#define PORT_INST_NUM 1"]
+                res += ["#define PORT_INSTS { PORT }"]
+                res += ["#define PORT_IOBUS_INST_NUM 1"]
+                res += ["#define PORT_IOBUS_INSTS { PORT_IOBUS }"]
+            else:
+                registers = []
+                for rg in register_groups:
+                    registers.append(rg.get("name"))
+                    address = rg.get('offset')
+                    res += [f"#define {rg.get('name')} ((::{classname}*){address}) "]
+                res += [f"#define {module.get('name')}_INST_NUM {len(registers)}"]
+                insts = f"#define {module.get('name')}_INSTS "+"{"
+                for r in registers:
+                    insts += f" {r},"
+                insts += " }"
+                res += [insts]
             res += [""]
+    return res
+
+def get_sercom_mux_h(tree):
+    res = [
+        "struct sercom_pad_mux_t",
+        "{",
+        "    int pad    :16  ;",
+        "    mux_position_t mux  ;",
+        "} ;",
+        "sercom_pad_mux_t sercom_pin_to_pad(sercom_t sercom, pin_t pin) ;"
+        ]
+
+    return res
+
+def get_sercom_mux_cpp(tree):
+    res = [
+        "sercom_pad_mux_t sercom_pin_to_pad(sercom_t sercom, pin_t pin)"
+        "{"
+        ]
+
+    res += ["}"]
+    
     return res
 
 if __name__ == "__main__":
