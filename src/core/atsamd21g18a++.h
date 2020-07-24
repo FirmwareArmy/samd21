@@ -210,7 +210,7 @@ enum class port_t : uint8_t {
 	B=1,
 	Count=2
 } ;
-inline ::Port* const PORT=(::Port*)0x41004400 ;
+inline ::Port* const PORT=(::Port*)0x41004400UL ;
 inline ::Port* const PORT_INSTS[]={ PORT, } ;
 
 inline ::Sysctrl* const SYSCTRL=(::Sysctrl*)0x40000800 ;

@@ -40,11 +40,15 @@ def main():
         for device in devices:
             print("\t", device.get("Dname"))
             
+            processor = device.xpath("processor")[0]
+            
             name = device.get("Dname")
-
+            cpu = processor.get("Dcore")
+            
             # add target
             config["arch"][name] = {
-                    "definition": f"cmake/{name}.cmake" 
+                    "definition": f"cmake/{name}.cmake",
+                    "cpu": cpu
                 }
             
             # add cmake file

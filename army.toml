@@ -20,104 +20,138 @@ version = "1.3.395"
 [arch]
 
 [arch.ATSAMD21E15BU]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21E15BU.cmake"
 
 [arch.ATSAMD21G17A]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21G17A.cmake"
 
 [arch.ATSAMD21G15A]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21G15A.cmake"
 
 [arch.ATSAMD21G15B]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21G15B.cmake"
 
 [arch.ATSAMD21E16L]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21E16L.cmake"
 
 [arch.ATSAMD21G15L]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21G15L.cmake"
 
 [arch.ATSAMD21E16B]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21E16B.cmake"
 
 [arch.ATSAMD21E16A]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21E16A.cmake"
 
 [arch.ATSAMD21G17L]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21G17L.cmake"
 
 [arch.ATSAMD21E16BU]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21E16BU.cmake"
 
 [arch.ATSAMD21E17DU]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21E17DU.cmake"
 
 [arch.ATSAMD21E17L]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21E17L.cmake"
 
 [arch.ATSAMD21G17D]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21G17D.cmake"
 
 [arch.ATSAMD21J15A]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21J15A.cmake"
 
 [arch.ATSAMD21G18A]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21G18A.cmake"
 
 [arch.ATSAMD21G17AU]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21G17AU.cmake"
 
 [arch.ATSAMD21J17D]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21J17D.cmake"
 
 [arch.ATSAMD21J17A]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21J17A.cmake"
 
 [arch.ATSAMD21E15CU]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21E15CU.cmake"
 
 [arch.ATSAMD21E15B]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21E15B.cmake"
 
 [arch.ATSAMD21E15A]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21E15A.cmake"
 
 [arch.ATSAMD21E17A]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21E17A.cmake"
 
 [arch.ATSAMD21E15L]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21E15L.cmake"
 
 [arch.ATSAMD21E17D]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21E17D.cmake"
 
 [arch.ATSAMD21J15B]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21J15B.cmake"
 
 [arch.ATSAMD21G16L]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21G16L.cmake"
 
 [arch.ATSAMD21E16CU]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21E16CU.cmake"
 
 [arch.ATSAMD21G16A]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21G16A.cmake"
 
 [arch.ATSAMD21G16B]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21G16B.cmake"
 
 [arch.ATSAMD21J16B]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21J16B.cmake"
 
 [arch.ATSAMD21G18AU]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21G18AU.cmake"
 
 [arch.ATSAMD21J16A]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21J16A.cmake"
 
 [arch.ATSAMD21E18A]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21E18A.cmake"
 
 [arch.ATSAMD21J18A]
+cpu = "Cortex-M0+"
 definition = "cmake/ATSAMD21J18A.cmake"
 
