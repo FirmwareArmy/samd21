@@ -81,6 +81,9 @@ def main():
     lines += get_sercom_mux_h(tree)
     lines += [""]
 
+    lines += get_eic_h(tree)
+    lines += [""]
+
     lines += ["}"]
     lines += [""]
     
@@ -95,13 +98,17 @@ def main():
 
     lines = [
         f"#include <core/{device}++.h>",
+        f"#include <assert.h>",
         "",
+        '#pragma GCC diagnostic ignored "-Waggregate-return"',
         "",
         "namespace core {",
         ""
         ]
-    
     lines += get_sercom_mux_cpp(tree)
+    lines += [""]
+
+    lines += get_eic_cpp(tree)
     lines += [""]
 
     lines += ["}"]
@@ -204,7 +211,8 @@ def get_sercoms(tree):
         index += 1
     res += [f"\tCount={len(sercoms)}"]
     res += ["} ;"]
-    res += [f"const int SERCOM_NUMBER=(int)sercom_t::Count ;"]
+#    res += [f"const int SERCOM_NUMBER=(int)sercom_t::Count ;"]
+    res += [f"#define SERCOM_NUMBER {len(sercoms)}"]
 
     # add registers
     module = tree.xpath("//devices/device/peripherals/module[@name='SERCOM']")[0]
@@ -372,12 +380,102 @@ def get_sercom_mux_h(tree):
 
 def get_sercom_mux_cpp(tree):
     res = [
-        "sercom_pad_mux_t sercom_pin_to_pad(sercom_t sercom, pin_t pin)"
-        "{"
+        "sercom_pad_mux_t sercom_pin_to_pad(sercom_t sercom, pin_t pin)",
+        "{",
         ]
 
+    sercoms = tree.xpath("//devices/device/peripherals/module[@name='SERCOM']/instance")
+    for sercom in sercoms:
+        signals = sercom.xpath("signals/signal")
+        res += [f"    if(sercom==sercom_t::{sercom.get('name')})"]
+        res += ["    {"]
+        for signal in signals:
+            res += [f"        if(pin==pin_t::{signal.get('pad')})"]
+            res += ["            return {"+f"{signal.get('index')}, mux_position_t::{signal.get('function')}"+"} ;"]
+        res += ["    }"]
+        res += [""]
+    res += ["    assert(false) ;"]
+    res += ["    return { -1, mux_position_t::Count } ; // dummy return to avoid compiler warning"]
     res += ["}"]
     
+    return res
+
+def get_eic_h(tree):
+    res = []
+    
+    # add registers
+    module = tree.xpath("//devices/device/peripherals/module[@name='EIC']")[0]
+    register = module.xpath("instance/register-group[@name='EIC']")[0]
+    classname = module.get('name')[0]+module.get('name').lower()[1:]
+    address = register.get('offset')
+    res += [f"inline ::{classname}* const {register.get('name')}=(::{classname}*){address} ;"]
+
+    registers = module.xpath("instance/register-group[@name='EIC']")
+    insts = f"inline ::{classname}* const {module.get('name')}_INSTS[]="+"{"
+    for register in registers:
+        insts += f" {register.get('name')},"
+    insts += " } ;"
+    res += [insts]
+    
+    eics = tree.xpath("//devices/device/peripherals/module[@name='EIC']/instance/signals/signal")
+    extint = 0
+    nmi = 0
+    for eic in eics:
+        if eic.get("group")=="EXTINT":
+            extint += 1
+        elif eic.get("group")=="NMI":
+            nmi += 1
+            
+    res += [
+        f"#define EXTINT_NUMBER {extint}",
+        f"#define NMI_NUMBER {nmi}",
+        ]
+    
+    res += [
+        "",
+        "int8_t pin_to_extint(pin_t pin) ;",
+        "int8_t pin_to_nmi(pin_t pin) ;"
+        ]
+    return res 
+
+def get_eic_cpp(tree):
+    res = [
+        "int8_t pin_to_extint(pin_t pin)",
+        "{",
+        "    switch(pin)",
+        "    {",
+        ]
+
+    eics = tree.xpath("//devices/device/peripherals/module[@name='EIC']/instance/signals/signal")
+    for eic in eics:
+        if eic.get("group")=="EXTINT":
+            res += [f"    case pin_t::{eic.get('pad')}:"]
+            res += [f"        return {eic.get('index')} ;"]
+    res += ["    default:"]
+    res += ["        assert(false) ;"]
+    res += ["        return -1 ;"]
+    res += ["    }"]
+    res += ["}"]
+    res += [""]
+    
+    res += [
+        "int8_t pin_to_nmi(pin_t pin)",
+        "{",
+        "    switch(pin)",
+        "    {",
+        ]
+    eics = tree.xpath("//devices/device/peripherals/module[@name='EIC']/instance/signals/signal")
+    for eic in eics:
+        if eic.get("group")=="NMI":
+            res += [f"    case pin_t::{eic.get('pad')}:"]
+            res += [f"        return 0 ;"]
+    res += ["    default:"]
+    res += ["        assert(false) ;"]
+    res += ["        return -1 ;"]
+    res += ["    }"]
+    res += ["}"]
+    res += [""]
+
     return res
 
 if __name__ == "__main__":

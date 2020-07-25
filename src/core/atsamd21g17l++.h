@@ -240,7 +240,7 @@ enum class sercom_t : uint8_t {
 	SERCOM5=5,
 	Count=6
 } ;
-const int SERCOM_NUMBER=(int)sercom_t::Count ;
+#define SERCOM_NUMBER 6
 inline ::Sercom* const SERCOM0=(::Sercom*)0x42000800 ;
 inline ::Sercom* const SERCOM1=(::Sercom*)0x42000C00 ;
 inline ::Sercom* const SERCOM2=(::Sercom*)0x42001000 ;
@@ -268,6 +268,14 @@ struct sercom_pad_mux_t
     mux_position_t mux  ;
 } ;
 sercom_pad_mux_t sercom_pin_to_pad(sercom_t sercom, pin_t pin) ;
+
+inline ::Eic* const EIC=(::Eic*)0x40001800 ;
+inline ::Eic* const EIC_INSTS[]={ EIC, } ;
+#define EXTINT_NUMBER 37
+#define NMI_NUMBER 1
+
+int8_t pin_to_extint(pin_t pin) ;
+int8_t pin_to_nmi(pin_t pin) ;
 
 }
 
