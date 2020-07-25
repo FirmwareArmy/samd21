@@ -296,5 +296,25 @@ inline ::Eic* const EIC_INSTS[]={ EIC, } ;
 int8_t pin_to_extint(pin_t pin) ;
 int8_t pin_to_nmi(pin_t pin) ;
 
+enum class tc_t : uint8_t {
+	TC3=0,
+	TC4=1,
+	TC5=2,
+	TC6=3,
+	TC7=4,
+
+	TC4_32=1, // 32 bits TC consumes two 16 bits TC
+	TC6_32=3, // 32 bits TC consumes two 16 bits TC
+
+	Count=5
+} ;
+#define TC_NUMBER 5
+inline ::Tc* const TC3=(::Tc*)0x42002C00 ;
+inline ::Tc* const TC4=(::Tc*)0x42003000 ;
+inline ::Tc* const TC5=(::Tc*)0x42003400 ;
+inline ::Tc* const TC6=(::Tc*)0x42003800 ;
+inline ::Tc* const TC7=(::Tc*)0x42003C00 ;
+inline ::Tc* const TC_INSTS[]={ TC3, TC4, TC5, TC6, TC7, } ;
+
 }
 

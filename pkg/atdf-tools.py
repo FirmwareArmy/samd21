@@ -84,6 +84,9 @@ def main():
     lines += get_eic_h(tree)
     lines += [""]
 
+    lines += get_tcs(tree)
+    lines += [""]
+
     lines += ["}"]
     lines += [""]
     
@@ -475,6 +478,43 @@ def get_eic_cpp(tree):
     res += ["    }"]
     res += ["}"]
     res += [""]
+
+    return res
+
+def get_tcs(tree):
+    res = [
+        "enum class tc_t : uint8_t {"
+        ]
+    
+    tcs = tree.xpath("//devices/device/peripherals/module[@name='TC']/instance")
+    for master in ["0", "1"]:
+        index = 0
+        for tc in tcs:
+            if master=="0":
+                res += [f"\t{tc.get('name')}={index},"]
+            if master=="1" and tc.xpath("parameters/param[@name='MASTER']")[0].get("value")=="1":
+                res += [f"\t{tc.get('name')}_32={index}, // 32 bits TC consumes two 16 bits TC"]
+            index += 1
+        res += [""]
+
+    res += [f"\tCount={len(tcs)}"]
+    res += ["} ;"]
+#    res += [f"const int SERCOM_NUMBER=(int)sercom_t::Count ;"]
+    res += [f"#define TC_NUMBER {len(tcs)}"]
+ 
+    # add registers
+    module = tree.xpath("//devices/device/peripherals/module[@name='TC']")[0]
+    registers = module.xpath("instance/register-group[@name-in-module='TC']")
+    classname = module.get('name')[0]+module.get('name').lower()[1:]
+    for register in registers:
+        address = register.get('offset')
+        res += [f"inline ::{classname}* const {register.get('name')}=(::{classname}*){address} ;"]
+ 
+    insts = f"inline ::{classname}* const {module.get('name')}_INSTS[]="+"{"
+    for register in registers:
+        insts += f" {register.get('name')},"
+    insts += " } ;"
+    res += [insts]
 
     return res
 
