@@ -87,6 +87,12 @@ def main():
     lines += get_tcs(tree)
     lines += [""]
 
+    lines += get_nvmctrl(tree)
+    lines += [""]
+
+    lines += get_usb(tree)
+    lines += [""]
+
     lines += ["}"]
     lines += [""]
     
@@ -516,6 +522,41 @@ def get_tcs(tree):
     insts += " } ;"
     res += [insts]
 
+    return res
+
+def get_nvmctrl(tree):
+    res = []
+    
+    # add registers
+    module = tree.xpath("//devices/device/peripherals/module[@name='NVMCTRL']")[0]
+    registers = module.xpath("instance/register-group[@name-in-module='NVMCTRL']")
+    classname = module.get('name')[0]+module.get('name').lower()[1:]
+    for register in registers:
+        address = register.get('offset')
+        res += [f"inline ::{classname}* const {register.get('name')}=(::{classname}*){address} ;"]
+ 
+    # add registers
+    memory_segments = tree.xpath("//devices/device/address-spaces/address-space/memory-segment[@type='fuses']")
+    for segment in memory_segments:
+        address = segment.get('start')
+        res += [f"inline void* const NVMCTRL_{segment.get('name')}=(void*){address}UL ;"]
+
+    return res
+
+def get_usb(tree):
+    res = []
+    
+    # add registers
+    if len(tree.xpath("//devices/device/peripherals/module[@name='USB']"))==0:
+        return []
+    
+    module = tree.xpath("//devices/device/peripherals/module[@name='USB']")[0]
+    registers = module.xpath("instance/register-group[@name-in-module='USB']")
+    classname = module.get('name')[0]+module.get('name').lower()[1:]
+    for register in registers:
+        address = register.get('offset')
+        res += [f"inline ::{classname}* const {register.get('name')}=(::{classname}*){address} ;"]
+ 
     return res
 
 if __name__ == "__main__":

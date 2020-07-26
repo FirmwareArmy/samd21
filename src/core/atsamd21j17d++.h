@@ -318,5 +318,16 @@ inline ::Tc* const TC6=(::Tc*)0x42003800 ;
 inline ::Tc* const TC7=(::Tc*)0x42003C00 ;
 inline ::Tc* const TC_INSTS[]={ TC3, TC4, TC5, TC6, TC7, } ;
 
+inline ::Nvmctrl* const NVMCTRL=(::Nvmctrl*)0x41004000 ;
+inline void* const NVMCTRL_AUX3=(void*)0x0080A000UL ;
+inline void* const NVMCTRL_CAL=(void*)0x00800000UL ;
+inline void* const NVMCTRL_LOCKBIT=(void*)0x00802000UL ;
+inline void* const NVMCTRL_OTP1=(void*)0x00806000UL ;
+inline void* const NVMCTRL_OTP2=(void*)0x00806008UL ;
+inline void* const NVMCTRL_OTP4=(void*)0x00806020UL ;
+inline void* const NVMCTRL_TEMP_LOG=(void*)0x00806030UL ;
+
+inline ::Usb* const USB=(::Usb*)0x41005000 ;
+
 }
 
