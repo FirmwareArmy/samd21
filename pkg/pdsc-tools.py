@@ -134,8 +134,8 @@ def main():
                 f.write(f'set(LINKER_FLAGS "'+'${LINKER_FLAGS}'+' -T $ENV{LIBRARY_PATH}/'+f'dfp/{link}")\n')
             f.write("\n")
 
-    # create Core.h
-    with open(f"src/core/Core.h", "w") as f:
+    # create core.h
+    with open(f"src/core++/core.h", "w") as f:
         f.write("#pragma once\n")
         f.write("\n")
         f.write("#include <stdint.h>\n\n")
@@ -150,12 +150,12 @@ def main():
                 f.write("#elif ")
             name = file.replace("AT", "")
             f.write(f"defined(__{name}__) || defined(__{file}__)\n")
-            f.write(f"#    include <core/{file.lower()}++.h>\n")
+            f.write(f"#    include <core++/{file.lower()}++.h>\n")
         f.write("#endif\n")
 
-    # create Core.h
-    with open(f"src/core/Core.cpp", "w") as f:
-        f.write("#include <core/Core.h>\n")
+    # create core.h
+    with open(f"src/core++/core.cpp", "w") as f:
+        f.write("#include <core++/core.h>\n")
         f.write("\n")
         
         first = True
@@ -167,7 +167,7 @@ def main():
                 f.write("#elif ")
             name = file.replace("AT", "")
             f.write(f"defined(__{name}__) || defined(__{file}__)\n")
-            f.write(f"#    include <core/{file.lower()}++.cpp>\n")
+            f.write(f"#    include <core++/{file.lower()}++.cpp>\n")
         f.write("#endif\n")
 
     # create core.h

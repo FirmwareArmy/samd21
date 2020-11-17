@@ -99,14 +99,14 @@ def main():
 #     lines += get_peripherals(tree)
 #     lines += [""]
 
-    with open(f"src/core/{device}++.h", "w") as f:
+    with open(f"src/core++/{device}++.h", "w") as f:
         for line in lines:
             f.write(line+"\n")
         
 
 
     lines = [
-        f"#include <core/{device}++.h>",
+        f"#include <core++/{device}++.h>",
         f"#include <assert.h>",
         "",
         '#pragma GCC diagnostic ignored "-Waggregate-return"',
@@ -124,7 +124,7 @@ def main():
     lines += [""]
     
 
-    with open(f"src/core/{device}++.cpp", "w") as f:
+    with open(f"src/core++/{device}++.cpp", "w") as f:
         for line in lines:
             f.write(line+"\n")
 

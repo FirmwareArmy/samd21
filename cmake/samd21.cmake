@@ -1,7 +1,7 @@
 message("samd21 library path ${LIBRARY_PATH}")
 
 list(APPEND sources
-	${LIBRARY_PATH}/src/core/Core.cpp
+	${LIBRARY_PATH}/src/core++/core.cpp
 )
 
 include_directories(
