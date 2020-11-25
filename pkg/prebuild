@@ -24,7 +24,13 @@ then
 	
 	# create c++ processors definitions
 	find . -name "*.atdf" -exec python pkg/atdf-tools.py {} \;
+
+	# patch files for anonymous bitfields (allow to compile with clang)
+	python pkg/patch-anonymous-bitfields.py dfp
 	
+	# patch files link scripts to allow use of a bootloader 
+	python pkg/patch-bootloader.py dfp
+
 	# cleanup
 	rm -rf env
 fi
