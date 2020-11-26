@@ -31,6 +31,9 @@ then
 	# patch files link scripts to allow use of a bootloader 
 	python pkg/patch-bootloader.py dfp
 
+	# patch startup files to avoid droping vector table during link optimisation 
+	python pkg/patch-startup.py dfp
+
 	# cleanup
 	rm -rf env
 fi

@@ -279,5 +279,7 @@ inline void* const NVMCTRL_TEMP_LOG=(void*)0x00806030UL ;
 
 inline ::Usb* const USB=(::Usb*)0x41005000 ;
 
+inline ::Dsu* const DSU=(::Dsu*)0x41002000 ;
+
 }
 

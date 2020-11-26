@@ -93,6 +93,9 @@ def main():
     lines += get_usb(tree)
     lines += [""]
 
+    lines += get_dsu(tree)
+    lines += [""]
+
     lines += ["}"]
     lines += [""]
     
@@ -552,6 +555,22 @@ def get_usb(tree):
     
     module = tree.xpath("//devices/device/peripherals/module[@name='USB']")[0]
     registers = module.xpath("instance/register-group[@name-in-module='USB']")
+    classname = module.get('name')[0]+module.get('name').lower()[1:]
+    for register in registers:
+        address = register.get('offset')
+        res += [f"inline ::{classname}* const {register.get('name')}=(::{classname}*){address} ;"]
+ 
+    return res
+
+def get_dsu(tree):
+    res = []
+    
+    # add registers
+    if len(tree.xpath("//devices/device/peripherals/module[@name='DSU']"))==0:
+        return []
+    
+    module = tree.xpath("//devices/device/peripherals/module[@name='DSU']")[0]
+    registers = module.xpath("instance/register-group[@name-in-module='DSU']")
     classname = module.get('name')[0]+module.get('name').lower()[1:]
     for register in registers:
         address = register.get('offset')

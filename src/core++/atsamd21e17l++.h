@@ -274,5 +274,7 @@ inline void* const NVMCTRL_OTP4=(void*)0x00806020UL ;
 inline void* const NVMCTRL_TEMP_LOG=(void*)0x00806030UL ;
 
 
+inline ::Dsu* const DSU=(::Dsu*)0x41002000 ;
+
 }
 
