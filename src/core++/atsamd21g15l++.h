@@ -296,6 +296,12 @@ inline ::Tc* const TC7=(::Tc*)0x42003C00 ;
 inline ::Tc* const TC_INSTS[]={ TC3, TC4, TC5, TC6, TC7, } ;
 
 inline ::Nvmctrl* const NVMCTRL=(::Nvmctrl*)0x41004000 ;
+const auto FLASH_SIZE=32768 ;
+const auto PAGE_SIZE=64 ;
+const auto PAGES=512 ;
+const auto ROW_PAGES=4 ;
+const auto PAGES_PR_REGION=32 ;
+const auto USER_PAGE_OFFSET=0x00800000 ;
 inline void* const NVMCTRL_AUX0=(void*)0x00804000UL ;
 inline void* const NVMCTRL_AUX1=(void*)0x00806000UL ;
 inline void* const NVMCTRL_AUX3=(void*)0x0080A000UL ;

@@ -537,7 +537,11 @@ def get_nvmctrl(tree):
     for register in registers:
         address = register.get('offset')
         res += [f"inline ::{classname}* const {register.get('name')}=(::{classname}*){address} ;"]
- 
+
+    for parameter_name in ["FLASH_SIZE", "PAGE_SIZE", "PAGES", "ROW_PAGES", "PAGES_PR_REGION", "USER_PAGE_OFFSET"]:
+        parameter = module.xpath(f"instance/parameters/param[@name='{parameter_name}']")[0]
+        res += [f"const auto {parameter.get('name')}={parameter.get('value')} ;"]
+
     # add registers
     memory_segments = tree.xpath("//devices/device/address-spaces/address-space/memory-segment[@type='fuses']")
     for segment in memory_segments:
