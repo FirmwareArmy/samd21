@@ -29,7 +29,7 @@ then
 	python pkg/patch-anonymous-bitfields.py dfp
 	
 	# patch files link scripts to allow use of a bootloader 
-	python pkg/patch-bootloader.py dfp
+	python pkg/patch-ld-script.py dfp
 
 	# patch startup files to avoid droping vector table during link optimisation 
 	python pkg/patch-startup.py dfp

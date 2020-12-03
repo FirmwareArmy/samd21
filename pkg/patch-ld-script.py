@@ -28,7 +28,11 @@ def patch_file(file):
             return
 
         if line=="MEMORY\n":
-            newlines.append("BOOTLOADER_SIZE = DEFINED(BOOTLOADER_SIZE) ? BOOTLOADER_SIZE : 0x0000;\n")
+            newlines.append("PROVIDE( BOOTLOADER_SIZE = 0x0000 ) ;\n")
+#             newlines.append("BOOTLOADER_SIZE = DEFINED(BOOTLOADER_SIZE) ? BOOTLOADER_SIZE : 0x0000;\n") # does not work with clang
+        
+        if line.startswith("STACK_SIZE ="):
+            line = "PROVIDE( STACK_SIZE = 0x2000 ) ;\n"
 
         if re.search("^ *rom *\(.*$", line):
             line = re.sub(r"(.*0x[0-9a-fA-F]+)(.*0x[0-9a-fA-F]+)(.*)", r"\1+BOOTLOADER_SIZE\2-BOOTLOADER_SIZE\3", line)
