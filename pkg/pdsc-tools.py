@@ -122,15 +122,18 @@ def main():
             
             f.write("list(APPEND sources\n")
             for source in content["sources"]:
+                source = source.replace("gcc", "${CMAKE_CXX_COMPILER_ID}")
                 f.write("\t$ENV{LIBRARY_PATH}/"+f'dfp/{source}\n')
             f.write(")\n\n")
 
             f.write("include_directories(\n")
             for include in content["include_directories"]:
+                source = source.replace("gcc", "${CMAKE_CXX_COMPILER_ID}")
                 f.write("\t$ENV{LIBRARY_PATH}/"+f'dfp/{include}\n')
             f.write(")\n\n")
 
             for link in content["link"]:
+                link = link.replace("gcc", "${CMAKE_CXX_COMPILER_ID}")
                 f.write(f'set(LINKER_FLAGS "'+'${LINKER_FLAGS}'+' -T $ENV{LIBRARY_PATH}/'+f'dfp/{link}")\n')
             f.write("\n")
 
