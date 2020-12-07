@@ -540,7 +540,10 @@ def get_nvmctrl(tree):
 
     for parameter_name in ["FLASH_SIZE", "PAGE_SIZE", "PAGES", "ROW_PAGES", "PAGES_PR_REGION", "USER_PAGE_OFFSET"]:
         parameter = module.xpath(f"instance/parameters/param[@name='{parameter_name}']")[0]
-        res += [f"const auto {parameter.get('name')}={parameter.get('value')} ;"]
+#         if parameter.get('name') in ["USER_PAGE_OFFSET"]:
+#             res += [f"const void* {parameter.get('name')}={parameter.get('value')} ;"]
+#         else:
+        res += [f"const uint32_t {parameter.get('name')}={parameter.get('value')} ;"]
 
     # add registers
     memory_segments = tree.xpath("//devices/device/address-spaces/address-space/memory-segment[@type='fuses']")
