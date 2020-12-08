@@ -47,6 +47,13 @@ def patch_file(file):
         if re.search("^ *rom *\(.*$", line):
             line = re.sub(r"(.*0x[0-9a-fA-F]+)(.*0x[0-9a-fA-F]+)(.*)", r"\1+BOOTLOADER_SIZE\2-BOOTLOADER_SIZE\3", line)
 
+        if ".ARM.exidx is sorted" in line:
+            newlines.append("    .metadata : ALIGN(64)\n")
+            newlines.append("    {\n")
+            newlines.append("        KEEP(*(.metadata))\n")
+            newlines.append("    } > rom\n")
+            newlines.append("\n")
+
         newlines.append(line)
 
     with open(file, "w") as f:
