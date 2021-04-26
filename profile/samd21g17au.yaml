@@ -1,0 +1,4 @@
+arch:
+  name: SAMD21G17AU
+  package: samd21
+  version: 1.3.395

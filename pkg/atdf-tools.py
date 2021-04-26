@@ -1,6 +1,5 @@
 import sys
 from lxml import etree
-import tomlkit
 import os
 import re
 
@@ -16,7 +15,7 @@ def main():
     # open pdsc file
     tree = etree.parse(atdf).getroot()
 
-    device = tree.xpath("//devices/device")[0].get("name").lower()
+    device = tree.xpath("//devices/device")[0].get("name").replace("AT", "").lower()
     print("device:", device)
     
     lines = [

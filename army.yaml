@@ -1,0 +1,224 @@
+name: samd21
+description: samd21 processor definitions
+version: 1.3.395
+
+dependencies:
+  cmsis: latest
+
+definition:
+  cmake: cmake/samd21.cmake
+
+packaging:
+  include:
+    - cmake
+    - dfp
+    - LICENSE
+    - README.md
+    - src
+
+profiles:
+  - SAMD21E15BU
+  - SAMD21G17A
+  - SAMD21G15A
+  - SAMD21G15B
+  - SAMD21E16L
+  - SAMD21G15L
+  - SAMD21E16B
+  - SAMD21E16A
+  - SAMD21G17L
+  - SAMD21E16BU
+  - SAMD21E17DU
+  - SAMD21E17L
+  - SAMD21G17D
+  - SAMD21J15A
+  - SAMD21G18A
+  - SAMD21G17AU
+  - SAMD21J17D
+  - SAMD21J17A
+  - SAMD21E15CU
+  - SAMD21E15B
+  - SAMD21E15A
+  - SAMD21E17A
+  - SAMD21E15L
+  - SAMD21E17D
+  - SAMD21J15B
+  - SAMD21G16L
+  - SAMD21E16CU
+  - SAMD21G16A
+  - SAMD21G16B
+  - SAMD21J16B
+  - SAMD21G18AU
+  - SAMD21J16A
+  - SAMD21E18A
+  - SAMD21J18A
+archs:
+  - name: SAMD21E15BU
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21E15BU.cmake
+    mpu: SAMD21E15BU
+    mpu_definition: cmake/samd21e15bu.cmake
+  - name: SAMD21G17A
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21G17A.cmake
+    mpu: SAMD21G17A
+    mpu_definition: cmake/samd21g17a.cmake
+  - name: SAMD21G15A
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21G15A.cmake
+    mpu: SAMD21G15A
+    mpu_definition: cmake/samd21g15a.cmake
+  - name: SAMD21G15B
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21G15B.cmake
+    mpu: SAMD21G15B
+    mpu_definition: cmake/samd21g15b.cmake
+  - name: SAMD21E16L
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21E16L.cmake
+    mpu: SAMD21E16L
+    mpu_definition: cmake/samd21e16l.cmake
+  - name: SAMD21G15L
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21G15L.cmake
+    mpu: SAMD21G15L
+    mpu_definition: cmake/samd21g15l.cmake
+  - name: SAMD21E16B
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21E16B.cmake
+    mpu: SAMD21E16B
+    mpu_definition: cmake/samd21e16b.cmake
+  - name: SAMD21E16A
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21E16A.cmake
+    mpu: SAMD21E16A
+    mpu_definition: cmake/samd21e16a.cmake
+  - name: SAMD21G17L
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21G17L.cmake
+    mpu: SAMD21G17L
+    mpu_definition: cmake/samd21g17l.cmake
+  - name: SAMD21E16BU
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21E16BU.cmake
+    mpu: SAMD21E16BU
+    mpu_definition: cmake/samd21e16bu.cmake
+  - name: SAMD21E17DU
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21E17DU.cmake
+    mpu: SAMD21E17DU
+    mpu_definition: cmake/samd21e17du.cmake
+  - name: SAMD21E17L
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21E17L.cmake
+    mpu: SAMD21E17L
+    mpu_definition: cmake/samd21e17l.cmake
+  - name: SAMD21G17D
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21G17D.cmake
+    mpu: SAMD21G17D
+    mpu_definition: cmake/samd21g17d.cmake
+  - name: SAMD21J15A
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21J15A.cmake
+    mpu: SAMD21J15A
+    mpu_definition: cmake/samd21j15a.cmake
+  - name: SAMD21G18A
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21G18A.cmake
+    mpu: SAMD21G18A
+    mpu_definition: cmake/samd21g18a.cmake
+  - name: SAMD21G17AU
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21G17AU.cmake
+    mpu: SAMD21G17AU
+    mpu_definition: cmake/samd21g17au.cmake
+  - name: SAMD21J17D
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21J17D.cmake
+    mpu: SAMD21J17D
+    mpu_definition: cmake/samd21j17d.cmake
+  - name: SAMD21J17A
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21J17A.cmake
+    mpu: SAMD21J17A
+    mpu_definition: cmake/samd21j17a.cmake
+  - name: SAMD21E15CU
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21E15CU.cmake
+    mpu: SAMD21E15CU
+    mpu_definition: cmake/samd21e15cu.cmake
+  - name: SAMD21E15B
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21E15B.cmake
+    mpu: SAMD21E15B
+    mpu_definition: cmake/samd21e15b.cmake
+  - name: SAMD21E15A
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21E15A.cmake
+    mpu: SAMD21E15A
+    mpu_definition: cmake/samd21e15a.cmake
+  - name: SAMD21E17A
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21E17A.cmake
+    mpu: SAMD21E17A
+    mpu_definition: cmake/samd21e17a.cmake
+  - name: SAMD21E15L
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21E15L.cmake
+    mpu: SAMD21E15L
+    mpu_definition: cmake/samd21e15l.cmake
+  - name: SAMD21E17D
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21E17D.cmake
+    mpu: SAMD21E17D
+    mpu_definition: cmake/samd21e17d.cmake
+  - name: SAMD21J15B
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21J15B.cmake
+    mpu: SAMD21J15B
+    mpu_definition: cmake/samd21j15b.cmake
+  - name: SAMD21G16L
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21G16L.cmake
+    mpu: SAMD21G16L
+    mpu_definition: cmake/samd21g16l.cmake
+  - name: SAMD21E16CU
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21E16CU.cmake
+    mpu: SAMD21E16CU
+    mpu_definition: cmake/samd21e16cu.cmake
+  - name: SAMD21G16A
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21G16A.cmake
+    mpu: SAMD21G16A
+    mpu_definition: cmake/samd21g16a.cmake
+  - name: SAMD21G16B
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21G16B.cmake
+    mpu: SAMD21G16B
+    mpu_definition: cmake/samd21g16b.cmake
+  - name: SAMD21J16B
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21J16B.cmake
+    mpu: SAMD21J16B
+    mpu_definition: cmake/samd21j16b.cmake
+  - name: SAMD21G18AU
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21G18AU.cmake
+    mpu: SAMD21G18AU
+    mpu_definition: cmake/samd21g18au.cmake
+  - name: SAMD21J16A
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21J16A.cmake
+    mpu: SAMD21J16A
+    mpu_definition: cmake/samd21j16a.cmake
+  - name: SAMD21E18A
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21E18A.cmake
+    mpu: SAMD21E18A
+    mpu_definition: cmake/samd21e18a.cmake
+  - name: SAMD21J18A
+    cpu: cortex-m0plus
+    cpu_definition: cmake/SAMD21J18A.cmake
+    mpu: SAMD21J18A
+    mpu_definition: cmake/samd21j18a.cmake

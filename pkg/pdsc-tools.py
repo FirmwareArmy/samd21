@@ -1,8 +1,14 @@
 import sys
 from lxml import etree
-import tomlkit
+from ruamel.yaml import YAML
+from ruamel.yaml.scanner import ScannerError
 import os
 import re
+
+yaml = YAML()
+yaml.indent(mapping=2, sequence=4, offset=2)
+yaml.allow_duplicate_keys = False
+yaml.explicit_start = False
 
 def main():
 
@@ -17,12 +23,24 @@ def main():
     tree = etree.parse(pdsc).getroot()
 
     # open army.toml
-    with open("army.toml", "r") as f:
-        config = tomlkit.parse(f.read())
-    config["arch"] = {}
-    
+    with open("army.yaml", "r") as f:
+        try:
+            config = yaml.load(f)
+        except ScannerError as e:
+            print(
+                'Error parsing yaml of configuration file '
+                '{}: {}'.format(
+                    e.problem_mark,
+                    e.problem,
+                )
+            )
+            sys.exit(1)
+    config["archs"] = []
+    config["profiles"] = []
+
     # cmake files
-    cmake = {}
+    cpu_cmake = {}
+    mpu_cmake = {}
     
 #     requires = {'Dvendor': 'ARM:82', 'Dname': 'ARMCM7*'}
 #     a = get_el_by_condition(tree, requires)
@@ -38,40 +56,50 @@ def main():
         
         devices = family.xpath('device')
         for device in devices:
-            print("\t", device.get("Dname"))
+            print(f'    {device.get("Dname")}')
             
             processor = device.xpath("processor")[0]
             
-            name = device.get("Dname")
+            name = device.get("Dname").replace("AT", "")
             cpu = processor.get("Dcore")
-            
+
             # add target
-            config["arch"][name] = {
-                    "definition": f"cmake/{name}.cmake",
-                    "cpu": cpu
+            config["archs"].append({
+                "name": name,
+                "cpu": to_gcc_name(cpu),
+                "cpu_definition": f"cmake/{name}.cmake",
+                "mpu": name,
+                "mpu_definition": f"cmake/{name.lower()}.cmake",
+            })
+            
+            # add profiles
+            config["profiles"].append(name)
+            
+            # add cpu cmake file
+            cpu_cmake[name] = {
+                "set": {},
+                "defines": {},
+                "link": []
                 }
             
-            # add cmake file
-            cmake[name] = {
-                "message": "cmsis-samd21 library path $ENV{LIBRARY_PATH}",
+            # add mpu cmake file
+            mpu_cmake[name] = {
                 "set": {},
                 "sources": [],
                 "include_directories": [],
                 "defines": {},
                 "link": []
                 }
-            
-            core = device.xpath("processor")[0].get("Dcore")
-            cmake[name]["set"]["CPU"] = to_gcc_name(core)
-    
+
             for compile in device.xpath("compile"):
                 header = compile.get("header")
                 header_path = f"{os.path.dirname(header)}"
-                if header_path not in cmake[name]["include_directories"]:
-                    cmake[name]["include_directories"].append(header_path)
+                 
+                if header_path not in mpu_cmake[name]["include_directories"]:
+                    mpu_cmake[name]["include_directories"].append(header_path)
                 define = compile.get("define")
-                if define not in cmake[name]["defines"]:
-                    cmake[name]["defines"][define] = ""
+                if define not in mpu_cmake[name]["defines"]:
+                    cpu_cmake[name]["defines"][define] = ""
 
     print("\nAdd startup scripts:")
     # add startup scripts
@@ -86,107 +114,156 @@ def main():
             devices = get_devices(tree, condition)
 #             print("---", devices)
             for device in devices:
-                print(f"\t{device}")
+                device = device.replace("AT", "")
+                print(f"  {device}")
                 files = component.xpath("files/file")
                 for file in files:
                     category = file.get("category")
                     if category=="include":
-                        cmake[device]["include_directories"].append(file.get("name"))
+                        if file.get("name") not in mpu_cmake[device]["include_directories"]:
+                            mpu_cmake[device]["include_directories"].append(file.get("name"))
                     elif category=="source":
-                        if file.get("condition")=="GCC Exe" and file.get("name") not in cmake[device]["sources"]:
-                            cmake[device]["sources"].append(file.get("name"))
-                    elif category=="linkerScript" and file.get("condition")=="GCC Exe" and file.get("name") not in cmake[device]["link"]:
-                        cmake[device]["link"].append(file.get("name"))
+                        if file.get("condition")=="GCC Exe" and file.get("name") not in mpu_cmake[device]["sources"]:
+                            mpu_cmake[device]["sources"].append(file.get("name"))
+                    elif category=="linkerScript" and file.get("condition")=="GCC Exe" and file.get("name") not in cpu_cmake[device]["link"]:
+                        cpu_cmake[device]["link"].append(file.get("name"))
             
     # write army.toml
-    with open("army.toml", "w") as f:
-        f.write(tomlkit.dumps(config))
+    with open("army.yaml", "w") as f:
+        yaml.dump(config, f)
 
-    # write cmake files
-    for file in cmake:
-        content = cmake[file]
-        with open(f"cmake/{file}.cmake", "w") as f:
-            f.write(f'message("{content["message"]}")\n\n')
-            
+    # write cpu cmake files
+    for file in cpu_cmake:
+        content = cpu_cmake[file]
+        with open(f"cmake/{file.upper()}.cmake", "w") as f:
+            f.write('if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")\n')
+            f.write('    set(compiler "gcc")\n')
+            f.write('elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")\n')
+            f.write('    set(compiler "clang")\n')
+            f.write('else()\n')
+            f.write('    set(compiler "gcc")\n')
+            f.write('endif()\n')
+                         
             for set in content["set"]:
                 set_content = content["set"][set]
                 f.write(f'set({set} "{set_content}")\n')
             f.write("\n")
-            
+             
             for define in content["defines"]:
                 if content["defines"][define]=="":
                     f.write(f'set(COMMON_FLAGS "'+'${COMMON_FLAGS}'+f' -D{define}")\n')
                 else:
                     f.write(f'set(COMMON_FLAGS "'+'${COMMON_FLAGS}'+f' -D{define}")\n')
             f.write("\n")
-            
-            f.write("list(APPEND sources\n")
-            for source in content["sources"]:
-                source = source.replace("gcc", "${CMAKE_CXX_COMPILER_ID}")
-                f.write("\t$ENV{LIBRARY_PATH}/"+f'dfp/{source}\n')
-            f.write(")\n\n")
-
-            f.write("include_directories(\n")
-            for include in content["include_directories"]:
-                source = source.replace("gcc", "${CMAKE_CXX_COMPILER_ID}")
-                f.write("\t$ENV{LIBRARY_PATH}/"+f'dfp/{include}\n')
-            f.write(")\n\n")
-
+ 
             for link in content["link"]:
-                link = link.replace("gcc", "${CMAKE_CXX_COMPILER_ID}")
+                link = link.replace("gcc", "${compiler}")
                 f.write(f'set(LINKER_FLAGS "'+'${LINKER_FLAGS}'+' -T $ENV{LIBRARY_PATH}/'+f'dfp/{link}")\n')
             f.write("\n")
 
+    # write cpu cmake files
+    for file in mpu_cmake:
+        content = mpu_cmake[file]
+        with open(f"cmake/{file.lower()}.cmake", "w") as f:
+            f.write('if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")\n')
+            f.write('    set(compiler "gcc")\n')
+            f.write('elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")\n')
+            f.write('    set(compiler "clang")\n')
+            f.write('else()\n')
+            f.write('    set(compiler "gcc")\n')
+            f.write('endif()\n')
+              
+            for set in content["set"]:
+                set_content = content["set"][set]
+                f.write(f'set({set} "{set_content}")\n')
+            f.write("\n")
+              
+            for define in content["defines"]:
+                if content["defines"][define]=="":
+                    f.write(f'set(COMMON_FLAGS "'+'${COMMON_FLAGS}'+f' -D{define}")\n')
+                else:
+                    f.write(f'set(COMMON_FLAGS "'+'${COMMON_FLAGS}'+f' -D{define}")\n')
+            f.write("\n")
+              
+            f.write("list(APPEND sources\n")
+            for source in content["sources"]:
+                source = source.replace("gcc", "${compiler}")
+                f.write("    $ENV{LIBRARY_PATH}/"+f'dfp/{source}\n')
+            f.write(")\n\n")
+  
+            f.write("include_directories(\n")
+            for include in content["include_directories"]:
+                source = source.replace("gcc", "${compiler}")
+                f.write("    $ENV{LIBRARY_PATH}/"+f'dfp/{include}\n')
+            f.write(")\n\n")
+  
+            for link in content["link"]:
+                link = link.replace("gcc", "${compiler}")
+                f.write(f'set(LINKER_FLAGS "'+'${LINKER_FLAGS}'+' -T $ENV{LIBRARY_PATH}/'+f'dfp/{link}")\n')
+            f.write("\n")
+    
+    # write profiles
+    for file in mpu_cmake:
+        content = mpu_cmake[file]
+        with open(f"profile/{file.lower()}.yaml", "w") as f:
+            profile = {
+                "arch": {
+                    "name": file,
+                    "package": "samd21",
+                    "version": config['version']
+                }
+            }
+            yaml.dump(profile, f)
+            
+ 
     # create core.h
     with open(f"src/core++/core.h", "w") as f:
         f.write("#pragma once\n")
         f.write("\n")
         f.write("#include <stdint.h>\n\n")
         f.write("\n")
-        
+         
         first = True
-        for file in cmake:
+        for file in cpu_cmake:
             if first==True:
                 f.write("#if ")
                 first = False
             else:
                 f.write("#elif ")
-            name = file.replace("AT", "")
-            f.write(f"defined(__{name}__) || defined(__{file}__)\n")
+            f.write(f"defined(__{file}__) || defined(__AT{file}__)\n")
             f.write(f"#    include <core++/{file.lower()}++.h>\n")
         f.write("#endif\n")
-
+ 
     # create core.h
     with open(f"src/core++/core.cpp", "w") as f:
         f.write("#include <core++/core.h>\n")
         f.write("\n")
-        
+         
         first = True
-        for file in cmake:
+        for file in cpu_cmake:
             if first==True:
                 f.write("#if ")
                 first = False
             else:
                 f.write("#elif ")
             name = file.replace("AT", "")
-            f.write(f"defined(__{name}__) || defined(__{file}__)\n")
+            f.write(f"defined(__{file}__) || defined(__AT{file}__)\n")
             f.write(f"#    include <core++/{file.lower()}++.cpp>\n")
         f.write("#endif\n")
-
+ 
     # create core.h
     with open(f"src/core/core.h", "w") as f:
         f.write("#pragma once\n")
         f.write("\n")
         first = True
-        for file in cmake:
+        for file in cpu_cmake:
             if first==True:
                 f.write("#if ")
                 first = False
             else:
                 f.write("#elif ")
-            name = file.replace("AT", "")
-            f.write(f"defined(__{name}__) || defined(__{file}__)\n")
-            f.write(f"#    include <{name.lower()}.h>\n")
+            f.write(f"defined(__{file}__) || defined(__AT{file}__)\n")
+            f.write(f"#    include <{file.lower()}.h>\n")
         f.write("#endif\n")
 
 def pattern_to_regex(pattern):

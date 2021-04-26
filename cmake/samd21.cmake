@@ -1,14 +1,12 @@
-message("samd21 library path ${LIBRARY_PATH}")
-
 list(APPEND sources
-	${LIBRARY_PATH}/src/core++/core.cpp
+	${PACKAGE_PATH}/src/core++/core.cpp
 )
 
 include_directories(
-	${LIBRARY_PATH}/src
+	${PACKAGE_PATH}/src
 
-	${LIBRARY_PATH}/dfp/samd21a/include
-	${LIBRARY_PATH}/dfp/samd21b/include
-	${LIBRARY_PATH}/dfp/samd21c/include
-	${LIBRARY_PATH}/dfp/samd21d/include
+	${PACKAGE_PATH}/dfp/samd21a/include
+	${PACKAGE_PATH}/dfp/samd21b/include
+	${PACKAGE_PATH}/dfp/samd21c/include
+	${PACKAGE_PATH}/dfp/samd21d/include
 )
