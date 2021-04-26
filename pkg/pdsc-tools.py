@@ -158,7 +158,7 @@ def main():
  
             for link in content["link"]:
                 link = link.replace("gcc", "${compiler}")
-                f.write(f'set(LINKER_FLAGS "'+'${LINKER_FLAGS}'+' -T $ENV{LIBRARY_PATH}/'+f'dfp/{link}")\n')
+                f.write(f'set(LINKER_FLAGS "'+'${LINKER_FLAGS}'+' -T ${PACKAGE_PATH}/'+f'dfp/{link}")\n')
             f.write("\n")
 
     # write cpu cmake files
@@ -188,24 +188,24 @@ def main():
             f.write("list(APPEND sources\n")
             for source in content["sources"]:
                 source = source.replace("gcc", "${compiler}")
-                f.write("    $ENV{LIBRARY_PATH}/"+f'dfp/{source}\n')
+                f.write("    ${PACKAGE_PATH}/"+f'dfp/{source}\n')
             f.write(")\n\n")
   
             f.write("include_directories(\n")
             for include in content["include_directories"]:
                 source = source.replace("gcc", "${compiler}")
-                f.write("    $ENV{LIBRARY_PATH}/"+f'dfp/{include}\n')
+                f.write("    ${PACKAGE_PATH}/"+f'dfp/{include}\n')
             f.write(")\n\n")
   
             for link in content["link"]:
                 link = link.replace("gcc", "${compiler}")
-                f.write(f'set(LINKER_FLAGS "'+'${LINKER_FLAGS}'+' -T $ENV{LIBRARY_PATH}/'+f'dfp/{link}")\n')
+                f.write(f'set(LINKER_FLAGS "'+'${LINKER_FLAGS}'+' -T ${PACKAGE_PATH}/'+f'dfp/{link}")\n')
             f.write("\n")
     
     # write profiles
     for file in mpu_cmake:
         content = mpu_cmake[file]
-        with open(f"profile/{file.lower()}.yaml", "w") as f:
+        with open(f"profile/{file}.yaml", "w") as f:
             profile = {
                 "arch": {
                     "name": file,

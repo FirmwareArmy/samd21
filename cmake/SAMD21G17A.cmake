@@ -8,5 +8,5 @@ endif()
 
 set(COMMON_FLAGS "${COMMON_FLAGS} -D__SAMD21G17A__")
 
-set(LINKER_FLAGS "${LINKER_FLAGS} -T $ENV{LIBRARY_PATH}/dfp/samd21a/${compiler}/${compiler}/samd21g17a_flash.ld")
+set(LINKER_FLAGS "${LINKER_FLAGS} -T ${PACKAGE_PATH}/dfp/samd21a/${compiler}/${compiler}/samd21g17a_flash.ld")
 

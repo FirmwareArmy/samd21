@@ -6,7 +6,6 @@ else()
     set(compiler "gcc")
 endif()
 
-set(COMMON_FLAGS "${COMMON_FLAGS} -D__SAMD21E15B__")
-
-set(LINKER_FLAGS "${LINKER_FLAGS} -T ${PACKAGE_PATH}/dfp/samd21c/${compiler}/${compiler}/samd21e15b_flash.ld")
+set(COMMON_FLAGS "${COMMON_FLAGS} -D__SAMD21G18A__")
+set(LINKER_FLAGS "${LINKER_FLAGS} -T ${PACKAGE_PATH}/dfp/samd21a/${compiler}/${compiler}/samd21g18a_flash.ld")
 

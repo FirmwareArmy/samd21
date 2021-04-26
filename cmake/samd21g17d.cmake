@@ -8,12 +8,12 @@ endif()
 
 
 list(APPEND sources
-    $ENV{LIBRARY_PATH}/dfp/samd21d/${compiler}/system_samd21.c
-    $ENV{LIBRARY_PATH}/dfp/samd21d/${compiler}/${compiler}/startup_samd21.c
+    ${PACKAGE_PATH}/dfp/samd21d/${compiler}/system_samd21.c
+    ${PACKAGE_PATH}/dfp/samd21d/${compiler}/${compiler}/startup_samd21.c
 )
 
 include_directories(
-    $ENV{LIBRARY_PATH}/dfp/samd21d/include
+    ${PACKAGE_PATH}/dfp/samd21d/include
 )
 
 
