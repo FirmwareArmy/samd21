@@ -141,7 +141,7 @@ def main():
             f.write('elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")\n')
             f.write('    set(compiler "clang")\n')
             f.write('else()\n')
-            f.write('    set(compiler "gcc")\n')
+            f.write('    message(FATAL, "unsupported compiler: ${CMAKE_CXX_COMPILER_ID}")\n')
             f.write('endif()\n')
                          
             for set in content["set"]:
@@ -170,7 +170,7 @@ def main():
             f.write('elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")\n')
             f.write('    set(compiler "clang")\n')
             f.write('else()\n')
-            f.write('    set(compiler "gcc")\n')
+            f.write('    message(FATAL, "unsupported compiler: ${CMAKE_CXX_COMPILER_ID}")\n')
             f.write('endif()\n')
               
             for set in content["set"]:

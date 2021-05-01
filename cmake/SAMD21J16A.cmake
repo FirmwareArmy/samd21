@@ -3,7 +3,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     set(compiler "clang")
 else()
-    set(compiler "gcc")
+    message(FATAL, "unsupported compiler: ${CMAKE_CXX_COMPILER_ID}")
 endif()
 
 set(COMMON_FLAGS "${COMMON_FLAGS} -D__SAMD21J16A__")
