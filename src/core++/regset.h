@@ -131,22 +131,26 @@
  * Set fields to specified value, all other bits remains untouched
  * regSet(reg, FIELD1, FIELD2)
  */
-#define regSet(Register,...) Register.reg = Register.reg & ~std::remove_volatile<decltype(Register)>::type{{ FOR_EACH(_regMaskOP, __VA_ARGS__) }}.reg | std::remove_volatile<decltype(Register)>::type{{ FOR_EACH(_regSetOP, __VA_ARGS__) }}.reg
+#define regSet(Register,...) Register.reg = ( Register.reg & ~std::remove_volatile<decltype(Register)>::type{{ FOR_EACH(_regMaskOP, __VA_ARGS__) }}.reg ) | std::remove_volatile<decltype(Register)>::type{{ FOR_EACH(_regSetOP, __VA_ARGS__) }}.reg
 
 /**
  * Set fields to specified value, all other bits remains untouched
  * regSet(reg, FIELD1, 0x1, FIELD2, 0b11101)
  */
-#define regSetVal(Register,...) Register.reg = Register.reg & ~std::remove_volatile<decltype(Register)>::type{{ FOR_EACH2(_regMaskValOP, __VA_ARGS__) }}.reg | std::remove_volatile<decltype(Register)>::type{{ FOR_EACH2(_regSetValOP, __VA_ARGS__) }}.reg
+#define regSetVal(Register,...) Register.reg = ( Register.reg & ~std::remove_volatile<decltype(Register)>::type{{ FOR_EACH2(_regMaskValOP, __VA_ARGS__) }}.reg ) | std::remove_volatile<decltype(Register)>::type{{ FOR_EACH2(_regSetValOP, __VA_ARGS__) }}.reg
 
 /**
  * Set fields to 0, all other bits remains untouched
  * regSet(reg, FIELD1, FIELD2)
  */
-#define regClr(Register,...) Register.reg = Register.reg & ~std::remove_volatile<decltype(Register)>::type{{ FOR_EACH(_regMaskOP, __VA_ARGS__) }}.reg | std::remove_volatile<decltype(Register)>::type{{ FOR_EACH(_regClrOP, __VA_ARGS__) }}.reg
+#define regClr(Register,...) Register.reg = ( Register.reg & ~std::remove_volatile<decltype(Register)>::type{{ FOR_EACH(_regMaskOP, __VA_ARGS__) }}.reg ) | std::remove_volatile<decltype(Register)>::type{{ FOR_EACH(_regClrOP, __VA_ARGS__) }}.reg
 
 /**
  * Toggle fields, all other bits remains untouched
  * regSet(reg, FIELD1, FIELD2)
  */
 #define regTgl(Register,...) Register.reg = Register.reg ^ std::remove_volatile<decltype(Register)>::type{{ FOR_EACH(_regSetOP, __VA_ARGS__) }}.reg
+
+
+#pragma GCC diagnostic ignored "-Wbitfield-constant-conversion"
+#pragma GCC diagnostic ignored "-Wconstant-conversion"
