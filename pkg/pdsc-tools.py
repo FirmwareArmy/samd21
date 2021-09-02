@@ -49,6 +49,8 @@ def main():
 #         a = get_el_by_condition(tree, requires, a)
 #     exit(1)
     
+    profiles = {}
+    
     # parse devices
     families = tree.xpath("//devices/family")
     for family in families:
@@ -82,6 +84,10 @@ def main():
                 "link": []
                 }
             
+            profiles[name] = {
+                'cpu': to_gcc_name(cpu),
+                'family': family.get("Dfamily")
+            }
             # add mpu cmake file
             mpu_cmake[name] = {
                 "set": {},
@@ -203,17 +209,20 @@ def main():
             f.write("\n")
     
     # write profiles
-    for file in mpu_cmake:
-        content = mpu_cmake[file]
-        with open(f"profile/{file}.yaml", "w") as f:
-            profile = {
+    for profile in profiles:
+        content = profiles[profile]
+            
+        with open(f"profile/{profile}.yaml", "w") as f:
+            p = {
                 "arch": {
-                    "name": file,
+                    "name": profile,
+                    "family": content['family'],
+                    "cpu": content['cpu'],
                     "package": "samd21",
                     "version": config['version']
                 }
             }
-            yaml.dump(profile, f)
+            yaml.dump(p, f)
             
  
     # create core.h

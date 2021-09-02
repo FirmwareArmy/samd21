@@ -1,4 +1,6 @@
 arch:
   name: SAMD21E15A
+  family: SAMD21
+  cpu: cortex-m0plus
   package: samd21
   version: 1.3.395
